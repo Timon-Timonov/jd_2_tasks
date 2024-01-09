@@ -32,7 +32,7 @@ public class Dump implements Runnable {
 
 		// allCount += ConstantContainer.START_COUNT_OF_DUMP_PARTS;// temp!
 
-		synchronized (Integer.class) {
+		synchronized (ConstantContainer.SUNCHR) {
 			startFullingOfDump();
 			printCurrentState();
 		}
@@ -93,7 +93,7 @@ public class Dump implements Runnable {
 	}
 
 	private void doEveryNightWork() {
-		synchronized (Integer.class) {
+		synchronized (ConstantContainer.SUNCHR) {
 			night++;
 			int toNightCountOfParts = random.nextInt(
 					ConstantContainer.MAX_FACTORY_PARTS_PER_NIGHT + 1
@@ -113,7 +113,7 @@ public class Dump implements Runnable {
 
 
 	public PartsOfRobots getAnyPartFromDump() {
-		synchronized (Integer.class) {
+		synchronized (ConstantContainer.SUNCHR) {
 			List<PartsOfRobots> availibleParts = new ArrayList<>();
 			for (PartsOfRobots p : dumpList) {
 				if (p.getCount() > 0) {

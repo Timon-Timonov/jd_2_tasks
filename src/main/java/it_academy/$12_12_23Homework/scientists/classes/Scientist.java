@@ -4,6 +4,7 @@ package it_academy.$12_12_23Homework.scientists.classes;
 import it_academy.$12_12_23Homework.scientists.ConstantContainer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,6 +16,7 @@ public class Scientist implements Runnable {
 	private int night = 1;
 	private Random random = new Random();
 
+	//private int countOfBuildedRobots = 0;// temp!
 	// private int allCount = 0;// temp!
 
 
@@ -45,8 +47,12 @@ public class Scientist implements Runnable {
 
 		printServantState(todayList);
 
-		night++;
 		putPartsToScientistList(todayList);
+
+		//checkRobotsCount();// temp!
+
+
+		night++;
 	}
 
 
@@ -94,4 +100,20 @@ public class Scientist implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+	/*private void checkRobotsCount() {
+		if (scientistsList.size() == ConstantContainer.PARTS_OF_ROBOTS.length) {
+			int tempCount = scientistsList.stream()
+					.min(Comparator.comparing(p -> p.getCount()))
+					.get()
+					.getCount();
+			if (countOfBuildedRobots < tempCount) {
+				countOfBuildedRobots = tempCount;
+				System.out.println(Thread.currentThread().getName() + " night_" + night
+						+ " scientist build______________________________  " + countOfBuildedRobots);
+			}
+		} else if (scientistsList.size() > ConstantContainer.PARTS_OF_ROBOTS.length) {
+			throw new InvalidCountOfDifferentParts();
+		}
+	}// temp!*/
 }
