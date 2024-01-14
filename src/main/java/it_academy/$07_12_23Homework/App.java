@@ -6,33 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App {
+
 	public static void main(String[] args) {
 
-		List<String[]> inList = new ArrayList<>();
+		List<String[]> list = getLinesWithDataFromFile(ConstantContainer.PATH_TO_IN_FILE,
+				ConstantContainer.REGEX_DILIMETR_BETWEEN_VALUES_IN_LINE_FOR_IN_FILE);
 
-		try (BufferedReader br = new BufferedReader(new FileReader(ConstantContainer.PATH_TO_IN_FILE))) {
+		list.sort(new ArrayComparator());
 
-			String line = br.readLine();
-			while (line != null) {
-				inList.add(line.split(ConstantContainer.REGEX_DILIMETR_BETWEEN_VALUES_IN_LINE_FOR_IN_FILE));
-				line = br.readLine();
-			}
+		writeTextInFile(ConstantContainer.PATH_TO_OUT_FILE, confirmTextToFile(list));
 
-		} catch (IOException e) {
-			System.out.println(ConstantContainer.IN_FILE_EXCEPTION_MESSAGE);
-		}
-
-		inList.sort(new ArrayComparator());
-
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(ConstantContainer.PATH_TO_OUT_FILE))) {
-
-			bw.write(confirmTextToFile(inList));
-
-		} catch (IOException e) {
-			System.out.println(ConstantContainer.OUT_FILE_EXCEPTION_MESSAGE);
-		}
-
-		//printAllValues(inList);
+		//printAllValues(list);
 	}
 
 	private static String confirmTextToFile(List<String[]> outList) {
@@ -54,13 +38,36 @@ public class App {
 		return text.toString();
 	}
 
-	private static void printAllValues(List<String[]> inList) {
+/*	private static void printAllValues(List<String[]> inList) {
 		for (String[] str : inList) {
 			for (String val : str) {
 				System.out.print(val + ConstantContainer.DILIMETR_BETWEEN_VALUES_FOR_OUT_FILE);
 			}
 			System.out.print(ConstantContainer.DILIMETR_BETWEEN_LINES_FOR_OUT_FILE);
 			System.out.println(str.length);
+		}
+	}*/
+
+	private static List<String[]> getLinesWithDataFromFile(String path, String dilimetr) {
+		List<String[]> inList = new ArrayList<>();
+
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			String line = br.readLine();
+			while (line != null) {
+				inList.add(line.split(dilimetr));
+				line = br.readLine();
+			}
+		} catch (IOException e) {
+			System.out.println(ConstantContainer.IN_FILE_EXCEPTION_MESSAGE);
+		}
+		return inList;
+	}
+
+	private static void writeTextInFile(String path, String outText) {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
+			bw.write(outText);
+		} catch (IOException e) {
+			System.out.println(ConstantContainer.OUT_FILE_EXCEPTION_MESSAGE);
 		}
 	}
 }
