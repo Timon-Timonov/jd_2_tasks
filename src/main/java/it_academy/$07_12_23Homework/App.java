@@ -7,6 +7,7 @@ import java.util.List;
 
 public class App {
 
+
 	public static void main(String[] args) {
 
 		List<String[]> list = getLinesWithDataFromFile(ConstantContainer.PATH_TO_IN_FILE,
@@ -17,6 +18,7 @@ public class App {
 		writeTextInFile(ConstantContainer.PATH_TO_OUT_FILE, confirmTextToFile(list));
 
 		//printAllValues(list);
+
 	}
 
 	private static String confirmTextToFile(List<String[]> outList) {
@@ -35,10 +37,10 @@ public class App {
 			}
 			text.append(ConstantContainer.DILIMETR_BETWEEN_LINES_FOR_OUT_FILE);
 		}
-		return text.toString();
-	}
+	
 
-/*	private static void printAllValues(List<String[]> inList) {
+	private static void printAllValues(List<String[]> inList) {
+
 		for (String[] str : inList) {
 			for (String val : str) {
 				System.out.print(val + ConstantContainer.DILIMETR_BETWEEN_VALUES_FOR_OUT_FILE);
@@ -46,7 +48,7 @@ public class App {
 			System.out.print(ConstantContainer.DILIMETR_BETWEEN_LINES_FOR_OUT_FILE);
 			System.out.println(str.length);
 		}
-	}*/
+
 
 	private static List<String[]> getLinesWithDataFromFile(String path, String dilimetr) {
 		List<String[]> inList = new ArrayList<>();
@@ -69,5 +71,6 @@ public class App {
 		} catch (IOException e) {
 			System.out.println(ConstantContainer.OUT_FILE_EXCEPTION_MESSAGE);
 		}
+
 	}
 }

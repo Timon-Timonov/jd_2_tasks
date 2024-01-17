@@ -2,7 +2,7 @@ package it_academy.$12_12_23Homework.scientists;
 
 
 import it_academy.$12_12_23Homework.scientists.classes.Dump;
-import it_academy.$12_12_23Homework.scientists.classes.InvalidCountOfDifferentParts;
+import it_academy.$12_12_23Homework.scientists.exceptions.InvalidCountOfDifferentParts;
 import it_academy.$12_12_23Homework.scientists.classes.PartsOfRobots;
 import it_academy.$12_12_23Homework.scientists.classes.Scientist;
 
@@ -56,59 +56,61 @@ public class Runner {
 
 
 		for (int i = 0; i < lists.size(); i++) {
-			List<PartsOfRobots> roboParts = lists.get(i);
+			List<PartsOfRobots> robotParts = lists.get(i);
 
 			int robotCount = 0;
-			if (roboParts.size() == ConstantContainer.PARTS_OF_ROBOTS.length) {
+			if (robotParts.size() == ConstantContainer.PARTS_OF_ROBOTS.length) {
 
-				robotCount = roboParts.get(0).getCount();
-				for (PartsOfRobots part : roboParts) {
-					int count = part.getCount();
-					robotCount = Math.min(robotCount, count);
-				}//choosing of min count
+				robotCount = robotParts
+						.stream()
+						.map(PartsOfRobots::getCount)
+						.min(Integer::compareTo)
+						.orElse(0);
 
-				for (PartsOfRobots part : roboParts) {
-					part.decrPartCount(robotCount);
-				}//take parts from the list
 
-			} else if (roboParts.size() > ConstantContainer.PARTS_OF_ROBOTS.length) {
+				for (PartsOfRobots p : robotParts) {
+					p.decrPartCount(robotCount);
+				}
+
+
+			} else if (robotParts.size() > ConstantContainer.PARTS_OF_ROBOTS.length) {
 				throw new InvalidCountOfDifferentParts();
 			}
 			countOfRobots[i] = robotCount;
 			System.out.println((i + 1) + "st scientist build " + robotCount + " robot(s).");
-			System.out.println("His rest of roboParts: " + roboParts.toString());
+			System.out.println("His rest of roboParts: " + robotParts.toString());
 
 		}
 		return countOfRobots;
 	}
 
-	private static void chooseWinner(int[] countOfRObots) {
+	private static void chooseWinner(int[] countOfRobots) {
 
-		int maxCountOfRobots = 0;
-		for (int count : countOfRObots) {
-			maxCountOfRobots = Math.max(maxCountOfRobots, count);
-		}//choosing of max count
+		int maxCountOfRobots = Arrays.stream(countOfRobots)
+				.max().orElse(0);
 
 		if (maxCountOfRobots > 0) {
-			int countOfWinners = 0;
-			int lastWinnerIndex = 0;
-			for (int i = 0; i < countOfRObots.length; i++) {
-				if (countOfRObots[i] == maxCountOfRobots) {
-					countOfWinners++;
-					lastWinnerIndex = i;
+			int countOfWinners = (int) Arrays.stream(countOfRobots).filter(p -> p == maxCountOfRobots).count();
+
+			int firstWinnerIndex = 0;
+			for (int i = 0; i < countOfRobots.length; i++) {
+				if (countOfRobots[i] == maxCountOfRobots) {
+					firstWinnerIndex = i;
+					break;
 				}
 			}
 
 			if (countOfWinners == 1) {
-				System.out.println(((lastWinnerIndex + 1) + "st scientist is winner. He build "
+				System.out.println(((firstWinnerIndex + 1) + "st scientist is winner. He build "
 						+ maxCountOfRobots + " robots."));
 			} else {
 				System.out.print("We have " + countOfWinners + " winners. They built "
 						+ maxCountOfRobots + " robots each. Their numbers: ");
 
 				boolean isFirst = true;
-				for (int i = 0; i < countOfRObots.length; i++) {
-					if (countOfRObots[i] == maxCountOfRobots) {
+
+				for (int i = 0; i < countOfRobots.length; i++) {
+					if (countOfRobots[i] == maxCountOfRobots) {
 						if (isFirst) {
 							System.out.print((i + 1));
 							isFirst = false;
@@ -117,6 +119,7 @@ public class Runner {
 						}
 					}
 				}
+
 				System.out.println(". ");
 			}
 		} else {

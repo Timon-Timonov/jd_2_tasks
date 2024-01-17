@@ -9,6 +9,7 @@ public class ArrayComparator implements Comparator<String[]> {
 
 			int comp = o1[i].compareTo(o2[i]);
 			if (comp != 0) {
+
 				Double d1 = getaDouble(o1[i]);
 				Double d2 = getaDouble(o2[i]);
 
@@ -22,11 +23,13 @@ public class ArrayComparator implements Comparator<String[]> {
 			}
 		}
 
+
 		if (o1.length != o2.length) {
 			return o1.length - o2.length;
 		}
 		return 0;
 	}
+
 
 	private Double getaDouble(String s) {
 		double d;
@@ -37,4 +40,5 @@ public class ArrayComparator implements Comparator<String[]> {
 		}
 		return d;
 	}
+
 }
