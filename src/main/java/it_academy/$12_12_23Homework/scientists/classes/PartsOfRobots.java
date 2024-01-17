@@ -1,5 +1,7 @@
 package it_academy.$12_12_23Homework.scientists.classes;
 
+import it_academy.$12_12_23Homework.scientists.exceptions.InvalidCountOfParts;
+
 import java.util.Objects;
 
 public class PartsOfRobots {

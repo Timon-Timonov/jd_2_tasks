@@ -1,6 +1,7 @@
 package it_academy.$12_12_23Homework.scientists.classes;
 
 import it_academy.$12_12_23Homework.scientists.ConstantContainer;
+import it_academy.$12_12_23Homework.scientists.exceptions.InvalidCountOfParts;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

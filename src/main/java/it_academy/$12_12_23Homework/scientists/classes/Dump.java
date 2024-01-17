@@ -6,13 +6,14 @@ import it_academy.$12_12_23Homework.scientists.ConstantContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Dump implements Runnable {
 
 	private static Dump dump;
 	private int night = 1;
 	private List<PartsOfRobots> dumpList = new ArrayList<>();
-	Random random = new Random();
+	private Random random = new Random();
 
 	// private int allCount = 0;// temp!
 
@@ -75,14 +76,6 @@ public class Dump implements Runnable {
 		System.out.println(Thread.currentThread().getName() + " night_" + night + " " + dumpList.toString());
 	}
 
-    /*private int countInDumpList() {
-        int count = 0;
-        for (PartsOfRobots part : dumpList) {
-            count += part.getCount();
-        }
-        return count;
-    }//temp!*/
-
 
 	private void waitNextNight() {
 		try {
@@ -114,18 +107,16 @@ public class Dump implements Runnable {
 
 	public PartsOfRobots getAnyPartFromDump() {
 		synchronized (ConstantContainer.SUNCHR) {
-			List<PartsOfRobots> availibleParts = new ArrayList<>();
-			for (PartsOfRobots p : dumpList) {
-				if (p.getCount() > 0) {
-					availibleParts.add(p);
-				}
-			}
-			if (availibleParts.isEmpty()) {
+			List<PartsOfRobots> availableParts = dumpList
+					.stream()
+					.filter(p -> p.getCount() > 0)
+					.collect(Collectors.toList());
+			if (availableParts.isEmpty()) {
 				return null;
 			}
-			int rand = random.nextInt(availibleParts.size());
-			availibleParts.get(rand).decrPartCount(1);//! the same objects in different lists(dumplist)
-			String name = availibleParts.get(rand).getName();
+			int rand = random.nextInt(availableParts.size());
+			availableParts.get(rand).decrPartCount(1);//! the same objects in different lists(dumplist)
+			String name = availableParts.get(rand).getName();
 			return new PartsOfRobots(name);//return NEW object with same name
 		}
 	}
