@@ -37,7 +37,9 @@ public class App {
 			}
 			text.append(ConstantContainer.DILIMETR_BETWEEN_LINES_FOR_OUT_FILE);
 		}
-	
+		return text.toString();
+	}
+
 
 	private static void printAllValues(List<String[]> inList) {
 
@@ -48,6 +50,7 @@ public class App {
 			System.out.print(ConstantContainer.DILIMETR_BETWEEN_LINES_FOR_OUT_FILE);
 			System.out.println(str.length);
 		}
+	}
 
 
 	private static List<String[]> getLinesWithDataFromFile(String path, String dilimetr) {
@@ -74,3 +77,4 @@ public class App {
 
 	}
 }
+
