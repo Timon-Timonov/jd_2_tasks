@@ -12,4 +12,5 @@ public interface ConstantContainer {
     int MIN_SERVANT_PARTS_PER_NIGHT = 1;
     String DUMP = "Dump_______";
     String Scientist = "Scientist_";
+    Object SUNCHR =new Object();// Object for synchronized blocks of code
 }
