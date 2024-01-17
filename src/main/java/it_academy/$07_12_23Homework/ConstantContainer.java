@@ -8,4 +8,5 @@ public interface ConstantContainer {
 	String DILIMETR_BETWEEN_LINES_FOR_OUT_FILE = "\n";
 	String IN_FILE_EXCEPTION_MESSAGE="InFileException!";
 	String OUT_FILE_EXCEPTION_MESSAGE="OutFileException!";
+	int CALCULATION_ACCURACY=1000;
 }

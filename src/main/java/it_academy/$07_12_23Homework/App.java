@@ -46,7 +46,7 @@ public class App {
 					text.append(val);
 					isFirst = false;
 				} else {
-					text.append(ConstantContainer.DILIMETR_BETWEEN_VALUES_FOR_OUT_FILE + val);
+					text.append(ConstantContainer.DILIMETR_BETWEEN_VALUES_FOR_OUT_FILE).append(val);
 				}
 			}
 			text.append(ConstantContainer.DILIMETR_BETWEEN_LINES_FOR_OUT_FILE);
