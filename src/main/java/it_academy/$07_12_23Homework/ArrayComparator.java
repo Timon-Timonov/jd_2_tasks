@@ -9,38 +9,36 @@ public class ArrayComparator implements Comparator<String[]> {
 
 			int comp = o1[i].compareTo(o2[i]);
 			if (comp != 0) {
-				Double d1 = null;
-				Double d2 = null;
 
-				try {
-					d1 = Double.parseDouble(o1[i].trim());
-				} catch (NumberFormatException e) {
-				}
+				Double d1 = getaDouble(o1[i]);
+				Double d2 = getaDouble(o2[i]);
 
-				try {
-					d2 = Double.parseDouble(o2[i].trim());
-				} catch (NumberFormatException e) {
-				}
-
-				if (d1 != null) {
-					if (d2 != null) {
-						return (int) ((d1 - d2) * ConstantContainer.CALCULATION_ACCURACY);
-					} else {
-						return -1;
-					}
-
+				if (d1 != null && d2 != null) {
+					return d1.compareTo(d2);
+				} else if (d1 == null && d2 == null) {
+					return comp;
 				} else {
-					if (d2 != null) {
-						return 1;
-					} else {
-						return comp;
-					}
+					return d1 != null ? -1 : 1;
 				}
 			}
 		}
+
+
 		if (o1.length != o2.length) {
 			return o1.length - o2.length;
 		}
 		return 0;
 	}
+
+
+	private Double getaDouble(String s) {
+		double d;
+		try {
+			d = Double.parseDouble(s.trim());
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		return d;
+	}
+
 }
