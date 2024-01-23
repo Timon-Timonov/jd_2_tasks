@@ -5,7 +5,6 @@ import it_academy.$18_01_24Homework.dao.personDaoImpl.PersonDaoImpl;
 import it_academy.$18_01_24Homework.dto.Person;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +33,18 @@ public class Main {
 
 		System.out.println();
 		System.out.println("Persons after filter in correct order:");
+
+		/*
+		//With getAll() method and filtering in Java
 		dao.getAll().stream()
 				.filter(person -> person.getAge() > MAX_AGE_EXCLUDE)
+				.sorted(Comparator.comparing(Person::getDateTimeCreate))
+				.forEach(System.out::println);
+		*/
+
+
+		//With special method (filtering in DB)
+		dao.getAllWithAgeGreaterThen(MAX_AGE_EXCLUDE).stream()
 				.sorted(Comparator.comparing(Person::getDateTimeCreate))
 				.forEach(System.out::println);
 	}

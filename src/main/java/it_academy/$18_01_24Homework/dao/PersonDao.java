@@ -8,4 +8,6 @@ import java.util.List;
 public interface PersonDao extends DAO<Person> {
 
 	List<Person> getAll() throws SQLException;
+
+	List<Person> getAllWithAgeGreaterThen(int age) throws SQLException;
 }

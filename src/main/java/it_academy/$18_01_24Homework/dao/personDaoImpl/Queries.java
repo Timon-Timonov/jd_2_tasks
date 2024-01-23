@@ -7,6 +7,8 @@ public interface Queries {
 
 	String GET_ALL_QUERY = "SELECT * FROM people.Person;";
 
+	String GET_WITH_AGE_GREATER_THEN_QUERY = "SELECT * FROM people.Person p WHERE p.age>?;";
+
 	String GET_BY_ID_QUERY = "SELECT * FROM people.Person p WHERE p.id=?;";
 
 	String DELETE_BY_ID_QUERY = "DELETE FROM People.person p WHERE p.id=?;";

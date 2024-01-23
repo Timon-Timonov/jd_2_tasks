@@ -10,6 +10,36 @@ import java.util.List;
 
 public class PersonDaoImpl implements PersonDao {
 
+	@Override
+	public List<Person> getAllWithAgeGreaterThen(int age) throws SQLException {
+		List<Person> list = new ArrayList<>();
+
+		try (Connection conn = Connector.getConnection();
+			 PreparedStatement ps = conn.prepareStatement(Queries.GET_WITH_AGE_GREATER_THEN_QUERY)) {
+
+			ps.setInt(1, age);
+
+			try (ResultSet resultSet = ps.executeQuery()) {
+
+				while (resultSet.next()) {
+					list.add(Person.builder()
+							.id(resultSet.getLong(1))
+							.age(resultSet.getInt(2))
+							.salary(resultSet.getDouble(3))
+							.passport(resultSet.getString(4))
+							.address(resultSet.getString(5))
+							.dateOfBirth(resultSet.getDate(6))
+							.dateTimeCreate(resultSet.getTimestamp(7))
+							.timeToLunch(resultSet.getTime(8))
+							.letter(resultSet.getString(9))
+							.build());
+				}
+			} catch (SQLException throwables) {
+				throwables.printStackTrace();
+			}
+		}
+		return list;
+	}
 
 	@Override
 	public List<Person> getAll() {
