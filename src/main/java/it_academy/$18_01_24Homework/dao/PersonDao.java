@@ -10,4 +10,6 @@ public interface PersonDao extends DAO<Person> {
 	List<Person> getAll() throws SQLException;
 
 	List<Person> getAllWithAgeGreaterThen(int age) throws SQLException;
+
+	List<Person> getAllPersonsWithCustomQuery(String query) throws SQLException;
 }

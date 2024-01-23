@@ -2,6 +2,8 @@ package it_academy.$18_01_24Homework;
 
 import it_academy.$18_01_24Homework.dao.PersonDao;
 import it_academy.$18_01_24Homework.dao.personDaoImpl.PersonDaoImpl;
+import it_academy.$18_01_24Homework.dao.personDaoImpl.Queries;
+import it_academy.$18_01_24Homework.dao.personDaoImpl.QueryCOnstructor;
 import it_academy.$18_01_24Homework.dto.Person;
 
 import java.sql.SQLException;
@@ -43,9 +45,21 @@ public class Main {
 		*/
 
 
+
+
+		/*
 		//With special method (filtering in DB)
 		dao.getAllWithAgeGreaterThen(MAX_AGE_EXCLUDE).stream()
 				.sorted(Comparator.comparing(Person::getDateTimeCreate))
+				.forEach(System.out::println);
+		*/
+
+
+		//With special method with query constructor (filtering and sorting in DB)
+		String query = QueryCOnstructor.constructQuery(2, Queries.GREATER_EXCLUDE,
+				String.valueOf(MAX_AGE_EXCLUDE), 7, false);
+
+		dao.getAllPersonsWithCustomQuery(query)
 				.forEach(System.out::println);
 	}
 
