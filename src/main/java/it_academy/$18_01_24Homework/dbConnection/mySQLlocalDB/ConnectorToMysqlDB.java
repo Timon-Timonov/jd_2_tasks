@@ -22,7 +22,7 @@ public class ConnectorToMysqlDB implements ConnectorToDB {
 		return connector;
 	}
 
-	public Connection getConnection() throws SQLException {
+	public synchronized Connection getConnection() throws SQLException {
 
 		if (connection == null || connection.isClosed()) {
 			connection = DriverManager.getConnection(

@@ -6,7 +6,8 @@ public class QueryConstructor {
 			(int[] columnNumber,
 			 String[] operator,
 			 String[] value,
-			 int[] columnNumberToOrderBy, boolean[] isInvertOrder) {
+			 int[] columnNumberToOrderBy,
+			 boolean[] isInvertOrder) {
 
 		StringBuilder str = new StringBuilder();
 		str.append(Queries.GET_ALL_WITH_WHERE_QUERY);

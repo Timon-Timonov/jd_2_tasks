@@ -164,7 +164,7 @@ public class PersonDaoImpl implements PersonDao {
 			count = ps.executeUpdate();
 
 			if (count == 1) {
-				System.out.println("Person with id=" + count + " delete successfully.");
+				System.out.println("Person with id=" + id + " delete successfully.");
 			}
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();

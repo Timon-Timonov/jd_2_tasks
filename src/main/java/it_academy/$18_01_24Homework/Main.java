@@ -11,6 +11,7 @@ import it_academy.$18_01_24Homework.dto.Person;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,15 +30,36 @@ public class Main {
 
 		listToAdd.forEach(person -> {
 			try {
-				Person aded = dao.save(person);
-				if (aded != null) {
-					System.out.println("Person " + aded + " added successfully.");
+				Person added = dao.save(person);
+				if (added != null) {
+					System.out.println("Person " + added + " added successfully.");
 				}
 			} catch (SQLException throwables) {
 				throwables.printStackTrace();
 			}
 		});
 
+		//Using method get(long id);
+		System.out.println();
+		int idGET = 5;
+		System.out.println("Person with id=" + idGET + " from database:");
+		Person idPerson = dao.get(idGET);
+		System.out.println(idPerson);
+		System.out.println();
+
+
+		//Using method update(Person p);
+		int age = idPerson.getAge();
+		idPerson.setAge(age + 3);
+		System.out.println(dao.update(idPerson) + " rows in DB was changed.");
+		System.out.println("Person after changing of age:");
+		System.out.println(dao.get(idGET));
+		System.out.println();
+
+		//Using method delete(long id);
+		int idDEL = 3;
+		System.out.println(dao.delete(idDEL) + " person has been deleted from database:");
+		System.out.println();
 
 
 		//With special method with query constructor (filtering and sorting in DB)
@@ -52,18 +74,12 @@ public class Main {
 				.forEach(System.out::println);
 
 
-
-
-
 		//With special method (filtering in DB, sorting in java App)
 		System.out.println();
 		System.out.println("Persons after select and filter in correct order:");
 		dao.getAllWithAgeGreaterThen(MAX_AGE_EXCLUDE).stream()
 				.sorted(Comparator.comparing(Person::getDateTimeCreate))
 				.forEach(System.out::println);
-
-
-
 
 
 		//With getAll() method (filtering and sorting in java App)
@@ -74,10 +90,9 @@ public class Main {
 				.sorted(Comparator.comparing(Person::getDateTimeCreate))
 				.forEach(System.out::println);
 
-
-
-
-		connector.getConnection().close();
+		if (connector.getConnection() != null) {
+			connector.getConnection().close();
+		}
 	}
 
 	private static List<Person> createPersonsList() {
