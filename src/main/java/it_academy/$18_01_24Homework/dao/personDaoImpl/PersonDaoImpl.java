@@ -1,7 +1,8 @@
 package it_academy.$18_01_24Homework.dao.personDaoImpl;
 
 import it_academy.$18_01_24Homework.dao.PersonDao;
-import it_academy.$18_01_24Homework.dbConnection.Connector;
+import it_academy.$18_01_24Homework.dbConnection.ConnectorToDB;
+import it_academy.$18_01_24Homework.dbConnection.mySQLlocalDB.ConnectorToMysqlDB;
 import it_academy.$18_01_24Homework.dto.Person;
 
 import java.sql.*;
@@ -9,58 +10,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDaoImpl implements PersonDao {
+
+	private ConnectorToDB connector = ConnectorToMysqlDB.getInstance();
+
 	@Override
 	public List<Person> getAllPersonsWithCustomQuery(String query) throws SQLException {
+
 		List<Person> list = new ArrayList<>();
+		Connection conn = connector.getConnection();
 
-		try (Connection conn = Connector.getConnection();
-			 Statement statement = conn.createStatement()) {
+		try (Statement statement = conn.createStatement();
+			 ResultSet resultSet = statement.executeQuery(query)) {
 
-			try (ResultSet resultSet = statement.executeQuery(query)) {
-
-				while (resultSet.next()) {
-					list.add(Person.builder()
-							.id(resultSet.getLong(1))
-							.age(resultSet.getInt(2))
-							.salary(resultSet.getDouble(3))
-							.passport(resultSet.getString(4))
-							.address(resultSet.getString(5))
-							.dateOfBirth(resultSet.getDate(6))
-							.dateTimeCreate(resultSet.getTimestamp(7))
-							.timeToLunch(resultSet.getTime(8))
-							.letter(resultSet.getString(9))
-							.build());
-				}
-			} catch (SQLException throwables) {
-				throwables.printStackTrace();
+			while (resultSet.next()) {
+				list.add(getPersonFromSetRow(resultSet));
 			}
 		}
 		return list;
 	}
 
 	@Override
-	public List<Person> getAllWithAgeGreaterThen(int age) throws SQLException {
+	public List<Person> getAllWithAgeGreaterThen(int ageExclude) throws SQLException {
+
 		List<Person> list = new ArrayList<>();
+		Connection conn = connector.getConnection();
 
-		try (Connection conn = Connector.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(Queries.GET_WITH_AGE_GREATER_THEN_QUERY)) {
+		try (PreparedStatement ps = conn.prepareStatement(Queries.GET_WITH_AGE_GREATER_THEN_QUERY)) {
 
-			ps.setInt(1, age);
+			ps.setInt(1, ageExclude);
 
 			try (ResultSet resultSet = ps.executeQuery()) {
 
 				while (resultSet.next()) {
-					list.add(Person.builder()
-							.id(resultSet.getLong(1))
-							.age(resultSet.getInt(2))
-							.salary(resultSet.getDouble(3))
-							.passport(resultSet.getString(4))
-							.address(resultSet.getString(5))
-							.dateOfBirth(resultSet.getDate(6))
-							.dateTimeCreate(resultSet.getTimestamp(7))
-							.timeToLunch(resultSet.getTime(8))
-							.letter(resultSet.getString(9))
-							.build());
+					list.add(getPersonFromSetRow(resultSet));
 				}
 			} catch (SQLException throwables) {
 				throwables.printStackTrace();
@@ -70,39 +52,31 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public List<Person> getAll() {
-		List<Person> list = new ArrayList<>();
+	public List<Person> getAll() throws SQLException {
 
-		try (Connection conn = Connector.getConnection();
-			 Statement statement = conn.createStatement();
+		List<Person> list = new ArrayList<>();
+		Connection conn = connector.getConnection();
+
+		try (Statement statement = conn.createStatement();
 			 ResultSet resultSet = statement.executeQuery(Queries.GET_ALL_QUERY)) {
 
 			while (resultSet.next()) {
-				list.add(Person.builder()
-						.id(resultSet.getLong(1))
-						.age(resultSet.getInt(2))
-						.salary(resultSet.getDouble(3))
-						.passport(resultSet.getString(4))
-						.address(resultSet.getString(5))
-						.dateOfBirth(resultSet.getDate(6))
-						.dateTimeCreate(resultSet.getTimestamp(7))
-						.timeToLunch(resultSet.getTime(8))
-						.letter(resultSet.getString(9))
-						.build());
+				list.add(getPersonFromSetRow(resultSet));
 			}
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
-
 		return list;
 	}
 
-	@Override
-	public Person save(Person person) {
 
-		try (Connection conn = Connector.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(
-					 Queries.ADD_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
+	@Override
+	public Person save(Person person) throws SQLException {
+
+		Connection conn = connector.getConnection();
+
+		try (PreparedStatement ps = conn.prepareStatement(
+				Queries.ADD_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
 			ps.setString(1, String.valueOf(person.getAge()));
 			ps.setString(2, String.valueOf(person.getSalary()));
@@ -115,9 +89,12 @@ public class PersonDaoImpl implements PersonDao {
 			ps.executeUpdate();
 
 			try (ResultSet resultSet = ps.getGeneratedKeys()) {
-				resultSet.next();
-				long id = resultSet.getLong(1);
-				person = get(id);
+				if (resultSet.next()) {
+					long id = resultSet.getLong(1);
+					person.setId(id);
+				} else {
+					return null;
+				}
 			} catch (SQLException throwables) {
 				throwables.printStackTrace();
 			}
@@ -130,41 +107,33 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public Person get(long id) {
+	public Person get(long id) throws SQLException {
 
-		Person person;
+		Connection conn = connector.getConnection();
+		Person person = null;
 
-		try (Connection conn = Connector.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(Queries.GET_BY_ID_QUERY)) {
+		try (PreparedStatement ps = conn.prepareStatement(Queries.GET_BY_ID_QUERY)) {
 
 			ps.setLong(1, id);
 
 			try (ResultSet resultSet = ps.executeQuery()) {
-				resultSet.next();
-				person = Person.builder()
-						.id(resultSet.getLong(1))
-						.age(resultSet.getInt(2))
-						.salary(resultSet.getDouble(3))
-						.passport(resultSet.getString(4))
-						.address(resultSet.getString(5))
-						.dateOfBirth(resultSet.getDate(6))
-						.dateTimeCreate(resultSet.getTimestamp(7))
-						.timeToLunch(resultSet.getTime(8))
-						.letter(resultSet.getString(9))
-						.build();
+				if (resultSet.next()) {
+					person = getPersonFromSetRow(resultSet);
+				}
 			}
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
-			person = null;
 		}
 		return person;
 	}
 
 	@Override
-	public void update(Person person) {
+	public int update(Person person) throws SQLException {
 
-		try (Connection conn = Connector.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(Queries.UPDATE_QUERY)) {
+		int count = 0;
+		Connection conn = connector.getConnection();
+
+		try (PreparedStatement ps = conn.prepareStatement(Queries.UPDATE_QUERY)) {
 
 			ps.setInt(1, person.getAge());
 			ps.setDouble(2, person.getSalary());
@@ -175,27 +144,45 @@ public class PersonDaoImpl implements PersonDao {
 			ps.setString(7, person.getLetter());
 			ps.setLong(8, person.getId());
 
-			ps.executeUpdate();
+			count = ps.executeUpdate();
 
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
+		return count;
 	}
 
 	@Override
-	public int delete(long id) {
+	public int delete(long id) throws SQLException {
+
 		int count = 0;
-		try (Connection conn = Connector.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(Queries.DELETE_BY_ID_QUERY)) {
+		Connection conn = connector.getConnection();
+
+		try (PreparedStatement ps = conn.prepareStatement(Queries.DELETE_BY_ID_QUERY)) {
 
 			ps.setLong(1, id);
 			count = ps.executeUpdate();
+
 			if (count == 1) {
-				System.out.println("Deleted successfully.");
+				System.out.println("Person with id=" + count + " delete successfully.");
 			}
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		}
 		return count;
+	}
+
+	private Person getPersonFromSetRow(ResultSet resultSet) throws SQLException {
+		return Person.builder()
+				.id(resultSet.getLong(1))
+				.age(resultSet.getInt(2))
+				.salary(resultSet.getDouble(3))
+				.passport(resultSet.getString(4))
+				.address(resultSet.getString(5))
+				.dateOfBirth(resultSet.getDate(6))
+				.dateTimeCreate(resultSet.getTimestamp(7))
+				.timeToLunch(resultSet.getTime(8))
+				.letter(resultSet.getString(9))
+				.build();
 	}
 }

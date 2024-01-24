@@ -47,6 +47,7 @@ public interface Queries {
 	String ORDER_BY = " ORDER BY ";
 	String INVERT_ORDER = " DESC ";
 	String POINT = ", ";
+	String SPACE = " ";
 
 
 }

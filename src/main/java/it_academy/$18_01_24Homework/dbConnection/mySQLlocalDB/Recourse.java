@@ -1,4 +1,4 @@
-package it_academy.$18_01_24Homework.dbConnection;
+package it_academy.$18_01_24Homework.dbConnection.mySQLlocalDB;
 
 import java.util.ResourceBundle;
 

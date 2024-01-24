@@ -7,7 +7,7 @@ public interface DAO<T> {
 
 	T get(long id) throws SQLException;
 
-	void update(T t) throws SQLException;
+	int update(T t) throws SQLException;
 
 	int delete(long id) throws SQLException;
 }
