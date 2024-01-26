@@ -36,7 +36,7 @@ public class DAOImpl_T<T> {
 			String query = Queries.createGetByIdQuery(id, table_name, column_names[identifier_index]);
 			ResultSet res = st.executeQuery(query);
 			while (res.next()) {
-				fillBean(clazz, res);
+				fillDTO(clazz, res);
 			}
 			res.close();
 		}
@@ -51,7 +51,7 @@ public class DAOImpl_T<T> {
 		try (Statement st = connector.getConnection().createStatement()) {
 			ResultSet res = st.executeQuery(query);
 			while (res.next()) {
-				fillBean(clazz, res);
+				fillDTO(clazz, res);
 				list.add(thiz);
 			}
 			res.close();
@@ -98,18 +98,13 @@ public class DAOImpl_T<T> {
 				while (res.next()) {
 					id = res.getInt(1);
 				}
-				if (id != 0) {
-					t = get(id, clazz);
-				} else {
-					res.close();
-					return null;
-				}
+				thiz = id != 0 ? get(id, clazz) : null;
 				res.close();
 			} else {
 				return null;
 			}
 		}
-		return t;
+		return thiz;
 	}
 
 
@@ -138,7 +133,7 @@ public class DAOImpl_T<T> {
 		}
 	}
 
-	private void fillBean(Class<?> clazz, ResultSet res) throws SQLException {
+	private void fillDTO(Class<?> clazz, ResultSet res) throws SQLException {
 		try {
 			Constructor constructor = clazz.getDeclaredConstructor();
 			constructor.setAccessible(true);
