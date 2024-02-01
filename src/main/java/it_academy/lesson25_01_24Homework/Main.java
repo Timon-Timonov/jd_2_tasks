@@ -27,7 +27,10 @@ public class Main {
 						.collect(Collectors.toList());
 		printList(savedList, "List of persons saved in database:");
 
-		List<Person> findList = dao.find(AGE_COLUMN_NAME, AGE_TO_SELECT_FROM_DB, COLUMN_NAME_DATE_TIME_CREATE);
+		List<Person> findList = dao.findByColumnValueGreaterThenNumberInOrderByOtherColumn(
+				AGE_COLUMN_NAME,
+				AGE_TO_SELECT_FROM_DB,
+				COLUMN_NAME_DATE_TIME_CREATE);
 		String message = "List of persons from database with " + AGE_COLUMN_NAME + " greater then " + AGE_TO_SELECT_FROM_DB + " :";
 		printList(findList, message);
 	}

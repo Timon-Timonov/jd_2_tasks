@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class PersonDaoImpl implements PersonDao {
+
 	@Override
 	public Person save(Person person) {
 		EntityManager em = HibernateUtils.getEntityManager();
@@ -24,7 +25,7 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	@Override
-	public List<Person> find(String columnNameFind, Number paramExcl, String columnNameOrderAsc) {
+	public List<Person> findByColumnValueGreaterThenNumberInOrderByOtherColumn(String columnNameFind, Number paramExcl, String columnNameOrderAsc) {
 		List<Person> personList;
 		EntityManager em = HibernateUtils.getEntityManager();
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();

@@ -7,5 +7,5 @@ import java.util.List;
 public interface PersonDao {
 	Person save(Person person);
 
-	List<Person> find(String columnNameFind, Number paramExcl, String columnNameOrderAsc);
+	List<Person> findByColumnValueGreaterThenNumberInOrderByOtherColumn(String columnNameFind, Number paramExcl, String columnNameOrderAsc);
 }
