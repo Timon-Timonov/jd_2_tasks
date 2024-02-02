@@ -7,6 +7,7 @@ import it_academy.lesson25_01_24Homework.dto.Person;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -17,24 +18,28 @@ public class PersonDaoImplTest {
 	@Test
 	public void testSave() {
 		PersonDao dao = new PersonDaoImpl();
-		List<Person> list = MockUtil.createPersons(MockConstants.TOTAL_COUNT);
+		List<Person> createdList = MockUtil.createPersons(MockConstants.TOTAL_COUNT);
+		List<Person> savedList = new ArrayList<>();
+		List<Person> findList = new ArrayList<>();
 		EntityManager em = HibernateUtils.getEntityManager();
 
-		Person person1 = dao.save(list.get(MockConstants.INDEX_1));
-		Person person2 = dao.save(list.get(MockConstants.INDEX_2));
-		Person person1_1 = em.find(Person.class, person1.getId());
-		Person person2_1 = em.find(Person.class, person2.getId());
-
-		assertNotNull(person1);
-		assertNotNull(person2);
-		assertNotNull(person1_1);
-		assertNotNull(person2_1);
-		assertEquals(person1, person1_1);
-		assertEquals(person2, person2_1);
-		assertNotEquals(person1, person2);
-		assertEquals(person1_1, list.get(MockConstants.INDEX_1));
-		assertEquals(person2_1, list.get(MockConstants.INDEX_2));
+		createdList.stream()
+				.map(dao::save)
+				.peek(savedList::add)
+				.map(person -> em.find(Person.class, person.getId()))
+				.forEach(findList::add);
 		em.close();
+
+		IntStream.range(0,MockConstants.MAX_INDEX)
+				.forEach(i->{
+					Person created=createdList.get(i);
+					Person saved=savedList.get(i);
+					Person fined=findList.get(i);
+					assertNotNull(saved);
+					assertNotNull(fined);
+					assertEquals(saved, fined);
+					assertEquals(fined, created);
+				});
 	}
 
 	@Test

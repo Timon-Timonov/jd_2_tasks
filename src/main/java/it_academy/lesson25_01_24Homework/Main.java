@@ -50,9 +50,13 @@ public class Main {
 
 
 	private static void printList(List<Person> list, String message) {
-		System.out.println();
-		System.out.println(message);
-		list.forEach(System.out::println);
-		System.out.println();
+		if (list != null) {
+			System.out.println("\n" + message);
+			list.forEach(System.out::println);
+			System.out.println();
+		} else {
+			System.out.println("\n" + message);
+			System.out.println("WARNING! List is null!\n");
+		}
 	}
 }

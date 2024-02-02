@@ -10,7 +10,6 @@ public class MockConstants {
 
 	public static final int INDEX_0 = 0;
 	public static final int INDEX_1 = 1;
-	public static final int INDEX_2 = 2;
 	public static final int INDEX_4 = 4;
 
 	public static final int SIZE_1 = 1;

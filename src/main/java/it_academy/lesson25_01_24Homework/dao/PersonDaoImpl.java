@@ -15,31 +15,38 @@ public class PersonDaoImpl implements PersonDao {
 
 	@Override
 	public Person save(Person person) {
+		Person person1;
 		EntityManager em = HibernateUtils.getEntityManager();
 		em.getTransaction().begin();
 		em.persist(person);
 		em.getTransaction().commit();
-		Person person1 = em.find(Person.class, person.getId());
+		person1 = em.find(Person.class, person.getId());
 		em.close();
 		return person1;
 	}
 
 	@Override
-	public List<Person> findByColumnValueGreaterThenNumberInOrderByOtherColumn(String columnNameFind, Number paramExcl, String columnNameOrderAsc) {
+	public List<Person> findByColumnValueGreaterThenNumberInOrderByOtherColumn(String columnNameFind, Number greaterThenExclude, String columnNameOrderAsc) {
+		if (columnNameFind == null || greaterThenExclude == null || columnNameOrderAsc == null) {
+			return null;
+		}
 		List<Person> personList;
 		EntityManager em = HibernateUtils.getEntityManager();
 		CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
 		CriteriaQuery<Person> criteriaQuery = criteriaBuilder.createQuery(Person.class);
 		Root<Person> root = criteriaQuery.from(Person.class);
 		Order order = criteriaBuilder.asc(root.get(columnNameOrderAsc));
-		criteriaQuery
-				.select(root)
-				.where(criteriaBuilder.gt(root.get(columnNameFind), paramExcl))
-				.orderBy(order);
-
-
-		Query query = em.createQuery(criteriaQuery);
-		personList = query.getResultList();
+		try {
+			criteriaQuery
+					.select(root)
+					.where(criteriaBuilder.gt(root.get(columnNameFind), greaterThenExclude))
+					.orderBy(order);
+			Query query = em.createQuery(criteriaQuery);
+			personList = query.getResultList();
+		} catch (IllegalArgumentException e) {
+			em.close();
+			return null;
+		}
 		em.close();
 		return personList;
 	}
