@@ -3,6 +3,8 @@
     <persistence-unit name="person">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>it_academy.lesson25_01_24Homework.dto.Person</class>
+        <class>it_academy.lesson01_02_24Homework.dto.People</class>
+        <class>it_academy.lesson01_02_24Homework.dto.Address</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
