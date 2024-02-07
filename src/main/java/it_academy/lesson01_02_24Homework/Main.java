@@ -69,17 +69,7 @@ public class Main {
 
 		//deleting any rows(3)
 		peopleDAO.delete(ID_TO_DELETE);
-		Address addressToRemove = addressDAO.get(ID_TO_DELETE);
-		if (addressToRemove != null) {
-			if (addressToRemove.getPeople().isEmpty()) {
-				addressDAO.delete(ID_TO_DELETE);
-			} else {
-				System.out.println("Removing of row from table address failed!\n" +
-						"You have to resolve all constraints.");
-			}
-		} else {
-			System.out.println("There is no row with such ID in table address.");
-		}
+		addressDAO.delete(ID_TO_DELETE);
 		HibernateUtil.closeFactory();
 	}
 }
