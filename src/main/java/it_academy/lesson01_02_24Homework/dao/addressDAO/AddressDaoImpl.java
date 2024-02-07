@@ -3,6 +3,7 @@ package it_academy.lesson01_02_24Homework.dao.addressDAO;
 import it_academy.lesson01_02_24Homework.dao.DaoImpl;
 import it_academy.lesson01_02_24Homework.dto.Address;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class AddressDaoImpl extends DaoImpl implements AddressDAO {
@@ -22,7 +23,8 @@ public class AddressDaoImpl extends DaoImpl implements AddressDAO {
 	@Override
 	public void delete(int id) {
 
-		super.delete(Address.class, id);
+			super.delete(Address.class, id);
+
 	}
 
 	@Override

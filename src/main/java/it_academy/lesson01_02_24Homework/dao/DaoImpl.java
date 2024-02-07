@@ -15,7 +15,6 @@ public abstract class DaoImpl<T> {
 
 	public static final String THERE_IS_NO_ROW_WITH_SUCH_ID = "There is no row with such ID in table %s.";
 
-
 	public T get(Class<?> clazz, int id) {
 
 		T t = null;

@@ -3,6 +3,7 @@ package it_academy.lesson01_02_24Homework.dao.peopleDAO;
 import it_academy.lesson01_02_24Homework.dao.DaoImpl;
 import it_academy.lesson01_02_24Homework.dto.People;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class PeopleDaoImpl extends DaoImpl implements PeopleDAO {
@@ -23,6 +24,7 @@ public class PeopleDaoImpl extends DaoImpl implements PeopleDAO {
 	public void delete(int id) {
 
 		super.delete(People.class, id);
+
 	}
 
 	@Override
