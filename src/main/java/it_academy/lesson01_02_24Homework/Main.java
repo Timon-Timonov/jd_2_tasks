@@ -50,7 +50,7 @@ public class Main {
 					.build());
 		});
 
-		//saving inti DB(1)
+		//saving into DB(1)
 		addresses.forEach(addressDAO::save);
 		people.forEach(peopleDAO::save);
 

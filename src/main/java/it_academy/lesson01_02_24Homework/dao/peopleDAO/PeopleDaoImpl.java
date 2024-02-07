@@ -24,7 +24,6 @@ public class PeopleDaoImpl extends DaoImpl implements PeopleDAO {
 	public void delete(int id) {
 
 		super.delete(People.class, id);
-
 	}
 
 	@Override
