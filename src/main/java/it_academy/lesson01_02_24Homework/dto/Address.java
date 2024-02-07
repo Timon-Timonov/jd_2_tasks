@@ -3,17 +3,20 @@ package it_academy.lesson01_02_24Homework.dto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(exclude = "people")
+@ToString(exclude = "people")
 @Entity
 @Table(name = "address")
-public class Address {
+public class Address implements Serializable {
 
 	@Id
 	@Column(name = "id")
@@ -25,4 +28,8 @@ public class Address {
 
 	@Column(name = "house")
 	private int house;
+
+	@OneToMany(mappedBy = "address",
+			fetch = FetchType.EAGER)
+	private Set<People> people = new HashSet<>();
 }

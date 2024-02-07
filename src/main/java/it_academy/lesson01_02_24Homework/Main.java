@@ -37,29 +37,31 @@ public class Main {
 
 		//creating of entities(1)
 		IntStream.range(0, COUNT_OF_EACH_ENTITIES).forEach(i -> {
+			Address address = Address.builder()
+					.house(i + ANY_HOUSE_NUMBER)
+					.street("UniqueStreet_" + (i + ONE))
+					.build();
+			addresses.add(address);
 			people.add(People.builder()
 					.age(i + ANY_AGE)
 					.name("UniqueName_" + (i + ONE))
 					.surname("UniqueSurName_" + (i + ONE))
-					.build());
-			addresses.add(Address.builder()
-					.house(i + ANY_HOUSE_NUMBER)
-					.street("UniqueStreet_" + (i + ONE))
+					.address(address)
 					.build());
 		});
 
-		//saving inti DB(1)
-		people.forEach(peopleDAO::save);
+		//saving into DB(1)
 		addresses.forEach(addressDAO::save);
+		people.forEach(peopleDAO::save);
 
 		//changing any parameters(2)
 		IntStream.range(0, COUNT_OF_LAST_ROWS).forEach(i -> {
-			People people1 = people.get(people.size() - i-1);
+			People people1 = people.get(people.size() - i - 1);
 			int age = people1.getAge() + AGE_INCREMENT;
 			people1.setAge(age);
 			peopleDAO.update(people1);
 
-			Address address = addresses.get(addresses.size() - i-1);
+			Address address = addresses.get(addresses.size() - i - 1);
 			int houseNumber = address.getHouse() + HOUSE_INCREMENT;
 			address.setHouse(houseNumber);
 			addressDAO.update(address);
