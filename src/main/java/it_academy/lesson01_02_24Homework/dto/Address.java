@@ -3,14 +3,16 @@ package it_academy.lesson01_02_24Homework.dto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(exclude = "people")
+@ToString(exclude = "people")
 @Entity
 @Table(name = "address")
 public class Address {
@@ -25,4 +27,8 @@ public class Address {
 
 	@Column(name = "house")
 	private int house;
+
+	@ManyToMany(mappedBy = "addresses",
+			fetch = FetchType.EAGER)
+	private Set<People> people = new HashSet<>();
 }

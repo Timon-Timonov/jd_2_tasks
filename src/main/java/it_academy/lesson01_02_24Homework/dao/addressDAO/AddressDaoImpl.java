@@ -2,8 +2,10 @@ package it_academy.lesson01_02_24Homework.dao.addressDAO;
 
 import it_academy.lesson01_02_24Homework.dao.DaoImpl;
 import it_academy.lesson01_02_24Homework.dto.Address;
+import it_academy.lesson01_02_24Homework.dto.People;
 
 import java.util.List;
+import java.util.Set;
 
 public class AddressDaoImpl extends DaoImpl implements AddressDAO {
 
@@ -22,7 +24,18 @@ public class AddressDaoImpl extends DaoImpl implements AddressDAO {
 	@Override
 	public void delete(int id) {
 
-		super.delete(Address.class, id);
+		Address addressToRemove = get(id);
+		if (addressToRemove != null) {
+			Set<People> people = addressToRemove.getPeople();
+			if (people == null || people.isEmpty()) {
+				super.delete(Address.class, id);
+			} else {
+				System.out.println("[WARNING!] Removing of row from table address failed!\n" +
+						"[WARNING!] You have to resolve all constraints.");
+			}
+		} else {
+			System.out.println("There is no row with such ID in table address.");
+		}
 	}
 
 	@Override
